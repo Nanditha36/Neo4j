@@ -1,22 +1,22 @@
 MATCH (n) 
 WHERE ID(n) = 3
-SET n.age = 24, n.height = 2.02
+SET n.age = 35, n.height = 1.76
 RETURN n
 
-MATCH (lebron)
+MATCH (virat) 
 WHERE ID(n) = 3
-SET lebron:REF
-RETURN lebron
+SET virat:REF
+RETURN virat
 
-MATCH (lebron {name: "LeBron James"}) - [contract:PLAYS_FOR] -> (:TEAM)
-SET contract.salary = 60000000
+MATCH (virat {name: "Virat Kohli"}) - [contract:PLAYS_FOR] -> (:TEAM)
+SET contract.salary = 180000000
 
-MATCH (lebron)
+MATCH (virat) 
 WHERE ID(n) = 3
-REMOVE lebron:REF
-RETURN lebron
+REMOVE virat:REF
+RETURN virat
 
-MATCH (lebron)
+MATCH (virat) 
 WHERE ID(n) = 3
-REMOVE lebron.age
-RETURN lebron
+REMOVE virat.age
+RETURN virat
