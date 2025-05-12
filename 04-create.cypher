@@ -1,9 +1,9 @@
-CREATE (lebron:PLAYER:COACH:GENERAL_MANAGER { name: "LeBron James", height: 2.01 })
+CREATE (virat:PLAYER:COACH:GENERAL_MANAGER { name: "Virat Kohli", height: 1.75 });
 
-CREATE (lebron:PLAYER:COACH:GENERAL_MANAGER { name: "LeBron James", height: 2.01 }) - [:PLAYS_FOR {salary: 40000000}] -> (:TEAM {name: "LA Lakers"})
+CREATE (virat:PLAYER:COACH:GENERAL_MANAGER { name: "Virat Kohli", height: 1.75 }) - [:PLAYS_FOR {salary: 150000000}] -> (:TEAM {name: "Royal Challengers Bangalore"});
 
-CREATE (lebron:PLAYER:COACH:GENERAL_MANAGER { name: "LeBron James", height: 2.01 })
-CREATE (:TEAM {name: "LA Lakers"})
+CREATE (virat:PLAYER:COACH:GENERAL_MANAGER { name: "Virat Kohli", height: 1.75 });
+CREATE (:TEAM {name: "Royal Challengers Bangalore"});
 
-MATCH (lebron:PLAYER {name: "LeBron James"}), (lakers:TEAM {name: "LA Lakers"})
-CREATE (lebron) - [:PLAYS_FOR] -> (lakers)
+MATCH (virat:PLAYER {name: "Virat Kohli"}), (rcb:TEAM {name: "Royal Challengers Bangalore"})
+CREATE (virat) - [:PLAYS_FOR] -> (rcb);
