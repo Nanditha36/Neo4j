@@ -8,125 +8,103 @@ MATCH (n) RETURN n
 // All nodes with specific label //
 MATCH (player:PLAYER) RETURN player
 
-// Properies //
+// Properties //
 MATCH (player:PLAYER) RETURN player.name, player.height
 
 ////////////////////////////////////////////////////////////
 // =============== Filtering For Nodes ================== //
 ////////////////////////////////////////////////////////////
 
-// Nodes where name is LeBron James //
+// Nodes where name is Virat Kohli //
 MATCH (player:PLAYER) 
-WHERE player.name = "LeBron James"
+WHERE player.name = "Virat Kohli"
 RETURN player
 
-// Nodes where name is LeBron James //
-MATCH (player:PLAYER {name: "LeBron James"}) 
+// Nodes where name is Virat Kohli //
+MATCH (player:PLAYER {name: "Virat Kohli"}) 
 RETURN player
 
-// Nodes where name is not LeBron James
+// Nodes where name is not Virat Kohli //
 MATCH (player:PLAYER) 
-WHERE player.name <> "LeBron James"
+WHERE player.name <> "Virat Kohli"
 RETURN player
 
-// Nodes where height is greater than or equal to 2
+// Nodes where height is greater than or equal to 1.80 //
 MATCH (player:PLAYER) 
-WHERE player.height >= 2
+WHERE player.height >= 1.80
 RETURN player
 
-// Nodes where height is less than 2
+// Nodes where height is less than 1.80 //
 MATCH (player:PLAYER) 
-WHERE player.height < 2
+WHERE player.height < 1.80
 RETURN player
 
-// Nodes with a BMI larger than 25
+// Nodes with a BMI larger than 25 //
 MATCH (player:PLAYER) 
 WHERE (player.weight / (player.height * player.height)) > 25
 RETURN player
 
-// Nodes with a BMI not larger than 25
+// Nodes with weight larger than 80 and height smaller than 1.75 //
 MATCH (player:PLAYER) 
-WHERE NOT (player.weight / (player.height * player.height)) > 25
+WHERE player.weight >= 80 AND player.height <= 1.75
 RETURN player
 
-// Nodes with a weight larger than 100 and a height smaller than 2
+// Limit //
 MATCH (player:PLAYER) 
-WHERE player.weight >= 100 AND player.height <= 2
-RETURN player
-
-// Nodes with height greater than 2.1 or weight greater than 120
-MATCH (player:PLAYER) 
-WHERE player.weight >= 120 OR player.height >= 2.1
-RETURN player
-
-// Limit
-MATCH (player:PLAYER) 
-WHERE player.height >= 2
+WHERE player.height >= 1.80
 RETURN player
 LIMIT 3
 
-// Skip
+// Skip //
 MATCH (player:PLAYER) 
-WHERE player.height >= 2
+WHERE player.height >= 1.80
 RETURN player
 SKIP 1
 LIMIT 3
 
-// Orderby
+// Orderby //
 MATCH (player:PLAYER) 
-WHERE player.height >= 2
+WHERE player.height >= 1.80
 RETURN player
 SKIP 1
 ORDER BY player.height DESC
 LIMIT 3
 
-
-// Query for multiple nodes
-MATCH (coach:COACH), (player:PLAYER)
-RETURN coach, player
-
-
 ////////////////////////////////////////////////////////////
 // ============== Querying Relationships ================ //
 ////////////////////////////////////////////////////////////
 
-// GET ALL LAKER PLAYERS //
+// GET ALL RCB PLAYERS //
 MATCH (player:PLAYER) - [:PLAYS_FOR] -> (team:TEAM)
-WHERE team.name = "LA Lakers"
+WHERE team.name = "Royal Challengers Bangalore"
 RETURN player, team 
 
-// GET ALL LAKER OR MAVERICKS PLAYERS //
-MATCH (player:PLAYER) - [:PLAYS_FOR] -> (team:TEAM)
-WHERE team.name = "LA Lakers" OR team.name = team.name = "Dallas Mavericks"
-RETURN player, team 
-
-// GET ALL PLAYERS THAT MAKE MORE THE 35M //
+// GET ALL PLAYERS THAT MAKE MORE THAN 120M //
 MATCH (player:PLAYER) - [contract :PLAYS_FOR] -> (team:TEAM)
-WHERE contract.salary >= 35000000
+WHERE contract.salary >= 120000000
 RETURN player
 
-// GET ALL OF LEBRONS TEAMMATES THAT MAKE MORE THAN 40M //
-MATCH (lebron:PLAYER {name: "LeBron James"}) - [:TEAMMATES] -> (teammate:PLAYER)
+// GET ALL OF VIRAT'S TEAMMATES THAT MAKE MORE THAN 140M //
+MATCH (virat:PLAYER {name: "Virat Kohli"}) - [:TEAMMATES] -> (teammate:PLAYER)
 MATCH (teammate) - [contract:PLAYS_FOR] -> (:TEAM)
-WHERE contract.salary >= 40000000
+WHERE contract.salary >= 140000000
 RETURN teammate
 
 ////////////////////////////////////////////////////////////
 // ==================== Aggregates ====================== //
 ////////////////////////////////////////////////////////////
 
-// GET PLAYERS AND NUMBER OF GAMES PLAYED //
-MATCH (player:PLAYER) - [gamePlayed:PLAYED_AGAINST] - (team:TEAM)
-RETURN player.name, COUNT(gamePlayed)
+// GET PLAYERS AND NUMBER OF MATCHES PLAYED //
+MATCH (player:PLAYER) - [matchPlayed:PLAYED_AGAINST] - (team:TEAM)
+RETURN player.name, COUNT(matchPlayed)
 
-// GET PLAYERS AND POINTS PER GAME //
-MATCH (player:PLAYER) - [gamePlayed:PLAYED_AGAINST] - (team:TEAM)
-RETURN player.name, AVG(gamePlayed.points)
+// GET PLAYERS AND AVERAGE RUNS PER MATCH //
+MATCH (player:PLAYER) - [matchPlayed:PLAYED_AGAINST] - (team:TEAM)
+RETURN player.name, AVG(matchPlayed.runs)
 
-
-// GET HIGHEST SCORING PLAYER IN THE LAKERS //
-MATCH (player:PLAYER) - [:PLAYS_FOR] - (:TEAM {name: "LA Lakers"})
-MATCH (player) - [gamePlayed:PLAYED_AGAINST] - (:TEAM)
-RETURN player.name, AVG(gamePlayed.points) AS ppg
-ORDER BY ppg DESC
+// GET HIGHEST SCORING PLAYER IN RCB //
+MATCH (player:PLAYER) - [:PLAYS_FOR] - (:TEAM {name: "Royal Challengers Bangalore"})
+MATCH (player) - [matchPlayed:PLAYED_AGAINST] - (:TEAM)
+RETURN player.name, AVG(matchPlayed.runs) AS rpg
+ORDER BY rpg DESC
 LIMIT 1
